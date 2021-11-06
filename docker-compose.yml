@@ -1,0 +1,27 @@
+version: '3'
+
+services:
+  kafka-stack:
+    container_name: kafka-stack
+    image: landoop/fast-data-dev:2.6.2
+    environment:
+      - ADV_HOST=127.0.0.1
+    ports:
+      - 3030:3030
+      - 9092:9092
+      - 8081:8081
+      - 8082:8082
+    restart: on-failure
+    
+  postgres:
+    image: postgres:12.6-alpine
+    container_name: postgres
+    environment:
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_USER=admin
+      - POSTGRES_DB=messages
+    ports:
+      - "5432:5432"
+    restart: on-failure
+    healthcheck:
+      test: pg_isready -U admin -d messages -h localhost -q    
